@@ -8,7 +8,7 @@ IFS=$'\n'
 
 #// variables \\\\\\\\#
 sys_cfg=/etc/dcboost
-usr_cfg=$HOME/.config/dcboost
+usr_cfg=${HOME:-/root}/.config/dcboost
 vmtouch_args=(-ft)
 name=$(basename $0)
 #//////// variables //#
