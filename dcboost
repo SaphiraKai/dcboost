@@ -1,0 +1,44 @@
+#!/bin/bash
+# Disk Cache Boost
+# A simple utility to explicitly add user-specified files and directories to the disk cache
+
+#? safety options
+set -euo pipefail
+IFS=$'\n'
+
+#// variables \\\\\\\\#
+sys_cfg=/etc/dcboost
+usr_cfg=$HOME/.config/dcboost
+vmtouch_args=(-ft)
+name=$(basename $0)
+#//////// variables //#
+
+#// functions \\\\\\\\#
+echoerr() { 1>&2 echo $@; }
+
+exiterr() {
+    CODE=$1; shift
+    [ -n $@ ] && echoerr $@
+
+    exit $CODE
+}
+#//////// functions //#
+
+#? read paths from configuration files
+paths=''
+[ -r $sys_cfg ] && [ -f $sys_cfg ] && paths="$paths"$'\n'"$(cat /etc/dcboost                 )"
+[ -r $usr_cfg ] && [ -f $usr_cfg ] && paths="$paths"$'\n'"$(cat $HOME/.config/dcboost        )"
+[ -n "$@"     ]                    && paths="$paths"$'\n'"$(for arg in $@; do echo $arg; done)"
+
+#? remove duplicates, delete comments, and check each path
+paths=$(echo "$paths" | sort -u | sed '/^#/d')
+for path in $paths; do
+    [ -e $path ] || exiterr 127 "$name: $path does not exist"
+    [ -s $path ] || echoerr "warning: $path has a size of zero"
+
+done
+
+#? ensure at least one path was specified
+[ -n "$paths" ] || exiterr 1 "$name: no valid paths specified on command line or in configuration files"
+
+vmtouch $vmtouch_args $paths
