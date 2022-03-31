@@ -1,0 +1,11 @@
+[Unit]
+Description=Disk Cache Boost
+AssertPathExists=/etc/dcboost
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/dcboost
+User=dcboost
+
+[Install]
+WantedBy=multi-user.target
