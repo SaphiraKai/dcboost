@@ -30,8 +30,8 @@ paths=''
 [ -r $usr_cfg ] && [ -f $usr_cfg ] && paths="$paths"$'\n'"$(cat $HOME/.config/dcboost        )"
 [ -n "$@"     ]                    && paths="$paths"$'\n'"$(for arg in $@; do echo $arg; done)"
 
-#? remove duplicates, delete comments, and check each path
-paths=$(echo "$paths" | sort -u | sed '/^#/d')
+#? remove duplicates, parse $HOME, delete comments, and check each path
+paths=$(echo "$paths" | sort -u | sed '/^#/d' | sed "s|\$HOME|$HOME|g")
 for path in $paths; do
     [ -e $path ] || exiterr 127 "$name: $path does not exist"
     [ -s $path ] || echoerr "warning: $path has a size of zero"
