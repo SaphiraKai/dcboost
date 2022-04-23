@@ -11,6 +11,6 @@ IFS=$'\n\t'
 install -Dvm 755 dcboost         ${DESTDIR:-}${PREFIX:-/usr}/bin/dcboost
 install -Dvm 755 dcboost.service ${DESTDIR:-}/etc/systemd/system/dcboost.service
 
-id dcboost >/dev/null || useradd dcboost
+id dcboost 2>&1 >/dev/null || useradd dcboost
 
 echo 'installed successfully'
