@@ -41,4 +41,4 @@ done
 #? ensure at least one path was specified
 [ -n "$paths" ] || exiterr 1 "$name: no valid paths specified on command line or in configuration files"
 
-vmtouch $vmtouch_args $paths
+nice -n19 vmtouch $vmtouch_args $paths
